@@ -4,19 +4,16 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.util.*
+import java.time.LocalDate
+import java.time.ZoneOffset
 import kotlin.random.Random
 
-
 class Luck {
-
     fun getLuck(player: Player): Int {
         val uuid = player.uniqueId
-        val formatter = SimpleDateFormat("yyyyMMdd")
-        val date = formatter.format(Date.from(Instant.now()))
-        val seed = uuid.hashCode() + date.toInt()
+        val currentDate = LocalDate.now()
+        val startOfDayTimestamp = currentDate.atStartOfDay(ZoneOffset.of("+8")).toInstant()
+        val seed = uuid.hashCode() + startOfDayTimestamp.epochSecond
 
         return Random(seed).nextInt()
     }
